@@ -10,7 +10,10 @@ Q: Why is this LGPL?
 A: Because this is a modification of a sample of PhysX.net when the license is LGPL. The license of PhysX.net is now MIT but it was not when I wrote this.  
   
 Q: How can I use?  
-A: If you use Windows, click "release" on top and click "bin-Win32-noinstall.zip" and unzip it and run "Tearing Cloth". Don't ask me what tearing means.
+A: If you use Windows, click "release" on top and click "bin-Win32-noinstall.zip" and unzip it and run "Tearing Cloth". Don't ask me what tearing means.  
+  
+Q: I can't read Japanese.  
+A: Guess it.
 
 ## License
 License is LGPL.  
