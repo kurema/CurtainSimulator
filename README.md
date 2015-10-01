@@ -13,7 +13,10 @@ Q: How can I use?
 A: If you use Windows, click "release" on top and click "bin-Win32-noinstall.zip" and unzip it and run "Tearing Cloth". Don't ask me what tearing means.  
   
 Q: I can't read Japanese.  
-A: Guess it.
+A: Guess it.  
+  
+Q: This does not run.  
+A: Maybe you need XNA Framework installed. I will fix it later.
 
 ## License
 License is LGPL.  
