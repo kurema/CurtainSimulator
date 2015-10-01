@@ -16,7 +16,7 @@ Q: I can't read Japanese.
 A: Guess it.  
   
 Q: This does not run.  
-A: Maybe you need XNA Framework installed. I will fix it later.
+A: Maybe you need PhysX SDK installed.
 
 ## License
 License is LGPL.  
