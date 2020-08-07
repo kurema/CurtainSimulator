@@ -20,8 +20,3 @@ License is LGPL.
   
 [PhysX.net](https://github.com/stilldesign/PhysX.Net) : Copyright (c) 2014 stilldesign
 LGPL
-
-The reason why this is LGPL is that this is based on a sample project of PhysX.net when this was LGPL.
-Current version of PhysX.net use MIT License.
-If you fix this code to use current version of PhysX.net, it's ok to use this as MIT License.
-You can treat my code as CC0.
