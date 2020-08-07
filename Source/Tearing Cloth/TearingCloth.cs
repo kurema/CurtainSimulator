@@ -7,12 +7,12 @@ using StillDesign.PhysX.MathPrimitives;
 
 namespace StillDesign.PhysX.Samples
 {
-	public partial class TearingCloth : Sample
-	{
-		private Cloth _clothL;
+    public partial class TearingCloth : Sample
+    {
+        private Cloth _clothL;
         private Cloth _clothR;
 
-		private DateTime _keyboardDelay;
+        private DateTime _keyboardDelay;
 
         private List<Actor> AnchorActorsL = new List<Actor>();
         private List<Actor> AnchorActorsR = new List<Actor>();
@@ -22,42 +22,44 @@ namespace StillDesign.PhysX.Samples
         private SlimDX.Direct3D10.Sprite sprite;
         //SlimDX.Direct3D10.Mesh mesh;
 
-        string MessageText = "H:ヘルプ Esc:終了";
+        string MessageText = "H:Help Esc:Exit J:日本語表示";
 
-		public TearingCloth()
-		{
-			_keyboardDelay = DateTime.MinValue;
+        bool IsJapanese = false;
 
-			Run();
-		}
+        public TearingCloth()
+        {
+            _keyboardDelay = DateTime.MinValue;
 
-		protected override void LoadContent()
-		{
+            Run();
+        }
+
+        protected override void LoadContent()
+        {
             font = new SlimDX.Direct3D10.Font(Engine.GraphicsDevice, 12, "ＭＳ ゴシック");
             sprite = new SlimDX.Direct3D10.Sprite(Engine.GraphicsDevice, 100);
-			Engine.Camera.View = SlimDX.Matrix.LookAtLH(new SlimDX.Vector3(0, 20, -40), new SlimDX.Vector3(0, 20, 0), new SlimDX.Vector3(0, 1, 0));
-		}
+            Engine.Camera.View = SlimDX.Matrix.LookAtLH(new SlimDX.Vector3(0, 20, -40), new SlimDX.Vector3(0, 20, 0), new SlimDX.Vector3(0, 1, 0));
+        }
 
-		protected override void Update(TimeSpan elapsed)
-		{
-			ProcessKeyboard();
-		}
+        protected override void Update(TimeSpan elapsed)
+        {
+            ProcessKeyboard();
+        }
 
-		protected override void Draw()
-		{
+        protected override void Draw()
+        {
             string outmessage = "";
-            outmessage += "Wind (x,y,z)=( " + windX + " , " + windY + " , " + windZ + " )\n"+MessageText;
+            outmessage += "Wind (x,y,z)=( " + windX + " , " + windY + " , " + windZ + " )\n" + MessageText;
 
             sprite.Begin(SlimDX.Direct3D10.SpriteFlags.SaveState);
-            font.Draw(sprite, outmessage, new System.Drawing.Rectangle(new System.Drawing.Point(0, 0), new System.Drawing.Size(600, 50)), SlimDX.Direct3D10.FontDrawFlags.Left, new SlimDX.Color4(255,255,255));
+            font.Draw(sprite, outmessage, new System.Drawing.Rectangle(new System.Drawing.Point(0, 0), new System.Drawing.Size(1000, 200)), SlimDX.Direct3D10.FontDrawFlags.Left, new SlimDX.Color4(255, 255, 255));
             sprite.End();
             Engine.GraphicsDevice.ClearState();
 
             //mesh.SetIndexData(new SlimDX.DataStream(inds, false, false), inds.Count());
             //mesh.SetPointRepresentationData(new SlimDX.DataStream(poss,false,false));
-		}
+        }
 
-		protected override void LoadPhysics(Scene scene)
+        protected override void LoadPhysics(Scene scene)
         {
             int w = 26;
             int h = 26;
@@ -91,7 +93,7 @@ namespace StillDesign.PhysX.Samples
                 // 32 bits are the default, so this isn't technically needed, but it's good to show in a sample
                 clothMeshDesc.Flags &= ~MeshFlag.Indices16Bit;
                 clothMeshDesc.Flags |= (MeshFlag)((int)clothMeshDesc.Flags | (int)ClothMeshFlag.Tearable);
-                
+
                 //var elements = new[]
                 //{
                 //new SlimDX.Direct3D10.InputElement("Position", 0, SlimDX.DXGI.Format.R32G32B32A32_Float, 0, 0),
@@ -196,7 +198,7 @@ namespace StillDesign.PhysX.Samples
             {
                 var actorDesc = new ActorDescription()
                 {
-                    GlobalPose = Matrix.Translation(new Vector3(0, -1,  0.2F * (float)Math.Pow(-1, i)) + p),
+                    GlobalPose = Matrix.Translation(new Vector3(0, -1, 0.2F * (float)Math.Pow(-1, i)) + p),
                     Shapes = { new BoxShapeDescription(new Vector3(2 * w + 4, 0.001F, 0.1F)) }
                 };
                 scene.CreateActor(actorDesc);
@@ -221,32 +223,32 @@ namespace StillDesign.PhysX.Samples
             }
         }
 
-		private void CreateBox(bool pm)
-		{
-			var random = new Random();
+        private void CreateBox(bool pm)
+        {
+            var random = new Random();
 
-			int w = random.Next(1, 8);
-			int h = random.Next(1, 8);
-			int d = random.Next(1, 8);
+            int w = random.Next(1, 8);
+            int h = random.Next(1, 8);
+            int d = random.Next(1, 8);
 
-			int x = random.Next(-26, 26);
-			int y = random.Next(0, 26);
+            int x = random.Next(-26, 26);
+            int y = random.Next(0, 26);
 
             int vx = random.Next(0, 10);
             int vy = random.Next(0, 5);
-			int vz = random.Next(5, 25);
+            int vz = random.Next(5, 25);
 
-			var desc = new ActorDescription(new BoxShapeDescription(w, h, d))
-			{
-				BodyDescription = new BodyDescription(100),
-				GlobalPose =
+            var desc = new ActorDescription(new BoxShapeDescription(w, h, d))
+            {
+                BodyDescription = new BodyDescription(100),
+                GlobalPose =
                     Matrix.RotationX((float)(random.NextDouble() * 2 * Math.PI - Math.PI / 2.0F * (pm ? 1 : -1))) *
                     Matrix.Translation(x, y, (pm ? 10 : -10)),
-			};
+            };
 
-			var actor = Engine.Scene.CreateActor(desc);
+            var actor = Engine.Scene.CreateActor(desc);
             actor.LinearVelocity = new Vector3(vx, vy, -vz * (pm ? 1 : -1));
-		}
+        }
 
         private void ProcessKeyboard()
         {
@@ -256,14 +258,14 @@ namespace StillDesign.PhysX.Samples
                 {
                     CreateBox(true);
 
-                    MessageText = "手前へ箱を投げます。";
+                    MessageText = IsJapanese ? "手前へ箱を投げます。" : "Throwing the box towards you.";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.N))
                 {
                     CreateBox(false);
 
-                    MessageText = "奥へ箱を投げます。";
+                    MessageText = IsJapanese ? "奥へ箱を投げます。" : "Throwing the box to the back.";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.V))
@@ -274,7 +276,7 @@ namespace StillDesign.PhysX.Samples
                         AnchorActorsL[i].LinearVelocity = new Vector3(-3F * i / AnchorActorsL.Count(), 0, 0);
                         AnchorActorsR[i].LinearVelocity = new Vector3(+3F * i / AnchorActorsR.Count(), 0, 0);
                     }
-                    MessageText = "カーテンを開けます(全ボール)。";
+                    MessageText = IsJapanese ? "カーテンを開けます(全ボール)。" : "Opening the curtain (using all balls).";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.C))
@@ -285,7 +287,7 @@ namespace StillDesign.PhysX.Samples
                         AnchorActorsL[i].LinearVelocity = new Vector3(+3F * i / AnchorActorsL.Count(), 0, 0);
                         AnchorActorsR[i].LinearVelocity = new Vector3(-3F * i / AnchorActorsR.Count(), 0, 0);
                     }
-                    MessageText = "カーテンを閉じます(全ボール)。";
+                    MessageText = IsJapanese ? "カーテンを閉じます(全ボール)。" : "Closing the curtain (using all balls).";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.G))
@@ -293,21 +295,23 @@ namespace StillDesign.PhysX.Samples
                     //Open Curtain with 2 ball
                     AnchorActorsL[AnchorActorsL.Count() - 1].LinearVelocity = new Vector3(-3, 0, 0);
                     AnchorActorsR[AnchorActorsR.Count() - 1].LinearVelocity = new Vector3(3, 0, 0);
-                    MessageText = "カーテンを開けます(端のボール)。";
+                    MessageText = IsJapanese ? "カーテンを開けます(端のボール)。" : "Opening the curtain (using two balls).";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.F))
                 {
                     //Close Curtain with 2 ball
-                    AnchorActorsL[AnchorActorsL.Count()-1].LinearVelocity = new Vector3(3, 0, 0);
+                    AnchorActorsL[AnchorActorsL.Count() - 1].LinearVelocity = new Vector3(3, 0, 0);
                     AnchorActorsR[AnchorActorsR.Count() - 1].LinearVelocity = new Vector3(-3, 0, 0);
-                    MessageText = "カーテンを閉じます(端のボール)。";
+                    MessageText = IsJapanese ? "カーテンを閉じます(端のボール)。" : "Closing the curtain (using two balls).";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.H))
                 {
                     _keyboardDelay = DateTime.Now;
-                    MessageText = "[ヘルプ] ASDW:移動 3:風停止 E:風ランダム 4R5T6Y:風をX(4R)Y(5T)Z(6Y)方向に増(456)減(RTY)\n         VCGF:カーテンを開閉(VC:全てのボールで,GF:端のボールで) KL:ボール停止(K:全て,L:端のみ)\n         BN:箱を投げる(B:手前へ,N:奥へ) Z:保存 H:ヘルプ  Esc:終了";
+                    MessageText = IsJapanese ?
+                        "[ヘルプ] ASDW:移動 3:風停止 E:風ランダム 4R5T6Y:風をX(4R)Y(5T)Z(6Y)方向に増(456)減(RTY)\n         VCGF:カーテンを開閉(VC:全てのボールで,GF:端のボールで) KL:ボール停止(K:全て,L:端のみ)\n         BN:箱を投げる(B:手前へ,N:奥へ) Z:保存 H:ヘルプ  Esc:終了" :
+                        "[Help] ASDW:Move the camera 3:Stop the wind E:Set wind random\n       4R5T6Y:Add(456)/Subtract(RTY) X(4R)Y(5T)Z(6Y) value from wind.\n       VCGF:Open/Close the curtain(VC:using all balls,GF:using two balls) KL:Stop balls(K:All,L:Two)\n       BN:Throw box(B:towards you,N:to the back) Z:Save H:Help  Esc:Exit";
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.K))
                 {
@@ -317,7 +321,7 @@ namespace StillDesign.PhysX.Samples
                         AnchorActorsL[i].LinearVelocity = new Vector3(0, 0, 0);
                         AnchorActorsR[i].LinearVelocity = new Vector3(0, 0, 0);
                     }
-                    MessageText = "ボール停止(全て)。";
+                    MessageText = IsJapanese ? "ボール停止(全て)。" : "Stoping all balls.";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.L))
@@ -325,7 +329,7 @@ namespace StillDesign.PhysX.Samples
                     //Stop 2 ball
                     AnchorActorsL[AnchorActorsL.Count() - 1].LinearVelocity = new Vector3(0, 0, 0);
                     AnchorActorsR[AnchorActorsR.Count() - 1].LinearVelocity = new Vector3(0, 0, 0);
-                    MessageText = "ボール停止(端)。";
+                    MessageText = IsJapanese ? "ボール停止(端)。" : "Stoping two balls.";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.D4))
@@ -333,7 +337,7 @@ namespace StillDesign.PhysX.Samples
                     windX += 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - X方向 - 増。";
+                    MessageText = IsJapanese? "風 - X方向 - 増。":"Wind - X - Increase";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.R))
@@ -341,7 +345,7 @@ namespace StillDesign.PhysX.Samples
                     windX -= 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - X方向 - 減。";
+                    MessageText = IsJapanese ? "風 - X方向 - 減。" : "Wind - X - Decrease";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.D5))
@@ -349,7 +353,7 @@ namespace StillDesign.PhysX.Samples
                     windY += 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - Y方向 - 増。";
+                    MessageText = IsJapanese ? "風 - Y方向 - 増。" : "Wind - Y - Increase";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.T))
@@ -357,7 +361,7 @@ namespace StillDesign.PhysX.Samples
                     windY -= 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - Y方向 - 減。";
+                    MessageText = IsJapanese ? "風 - Y方向 - 減。" : "Wind - Y - Decrease";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.D6))
@@ -365,7 +369,7 @@ namespace StillDesign.PhysX.Samples
                     windZ += 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - Z方向 - 増。";
+                    MessageText = IsJapanese ? "風 - Z方向 - 増。" : "Wind - Z - Increase";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.Y))
@@ -373,7 +377,7 @@ namespace StillDesign.PhysX.Samples
                     windZ -= 1.0F;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - Z方向 - 増。";
+                    MessageText = IsJapanese ? "風 - Z方向 - 減。" : "Wind - Z - Decrease";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.D3))
@@ -383,7 +387,7 @@ namespace StillDesign.PhysX.Samples
                     windZ = 0;
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - 停止。";
+                    MessageText = IsJapanese ? "風 - 停止。" : "Wind - Stop";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.E))
@@ -394,7 +398,7 @@ namespace StillDesign.PhysX.Samples
                     windZ = random.Next(-15, 15);
                     _clothL.WindAcceleration = new Vector3(windX, windY, windZ);
                     _clothR.WindAcceleration = new Vector3(windX, windY, windZ);
-                    MessageText = "風 - ランダム。";
+                    MessageText = IsJapanese ? "風 - ランダム。" : "Wind - Random";
                     _keyboardDelay = DateTime.Now;
                 }
                 else if (Engine.Keyboard.IsKeyDown(Keys.Z))
@@ -469,11 +473,18 @@ namespace StillDesign.PhysX.Samples
 
 
 
-                    MessageText = "カーテンの状態をファイル:" + (filename)+ "に保存しました。";
+                    MessageText = IsJapanese ? "カーテンの状態をファイル:" + (filename) + "に保存しました。" : "Saved the curtain :" + (filename);
                     _keyboardDelay = DateTime.Now;
 
                 }
+                else if (Engine.Keyboard.IsKeyDown(Keys.J))
+                {
+                    _keyboardDelay = DateTime.Now;
+                    IsJapanese = !IsJapanese;
+                    MessageText = IsJapanese ? "日本語モード" : "English mode";
+                }
+
             }
         }
-	}
+    }
 }
