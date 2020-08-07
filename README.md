@@ -1,4 +1,9 @@
 # CurtainSimulator
+Simulator of a curtain. Based on PhysX.net sample.
+You can open and close curtain, control wind and save as DirectX x file.
+
+Get it from [Releases](https://github.com/kurema/CurtainSimulator/releases).
+
 ## FAQ
 Q: What is this?  
 A: This is a simulator of a curtain, which is in your room near the window.  
